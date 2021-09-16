@@ -1,0 +1,92 @@
+---
+title: "Cancer Incidence - NHS Borders"
+output: html_notebook
+---
+
+
+```{r}
+p <- cancer_incidence_summary_borders %>% 
+  filter (cancer_site != "All cancer types",
+          sex != "All") %>% 
+  select(cancer_site, incidences_all_ages, sex) %>% 
+  distinct() %>% 
+  arrange(desc(incidences_all_ages)) %>% 
+  slice_max(incidences_all_ages,n = 20) %>% 
+  ggplot()+
+  aes(x= reorder(cancer_site,incidences_all_ages), y = incidences_all_ages, fill = sex ) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  color_theme() +
+  labs(x = "Number of incidences\n",
+       y = "\nCancer Site",
+      ) 
+
+ggplotly(p)
+```
+
+
+Breast  cancer:
+Known  risk factors  for  breast  cancer include  older  mother’s age  at  the  birth  of  her  first  child, smaller number of  children,  post-menopausal  obesity,  and  alcohol consumption.   The introduction  or extension  of  existing  screening  programmes leads  to  increases in  diagnoses of  breast  cancer. 
+
+Prostate cancer There are  few  modifiable  risk factors  for prostate  cancer.      The  rate  of  prostate-specific antigen  testing  has  a  significant  effect  on  rates of  diagnosis. 
+
+Lung cancer The  single  largest  risk  factor  for lung  cancer is cigarette  smoking  and  the  large  decrease  in lung  cancer in  men  reflects  decreases  in  smoking  prevalence  over several decades.  Occupational  exposures and  low  fruit  and  vegetable  consumption  are  also  risk  factors. 
+
+Colorectal cancer Recent  decreases  in  incidence  might  reflect  the  removal of  pre-malignant  polyps at colonoscopies  resulting  from  the  Scottish  Bowel Screening  Programme,  but  the  larger decrease  in  men  compared  with  women  is  not  consistent  with  men’s  lower uptake  of screening.  Modifiable  risk factors  for colorectal cancer include  red  and  processed  meat, overweight,  alcohol consumption  and  smoking.     
+ 
+## Risk Factors :
+The trends in  cancer incidence  may  also  be  influenced  by  changes in  the  prevalence  of risk factors associated  with  cancer over time.   
+
+Smoking : Smoking  is one  of  the  major risk  factors associated  with  lung  cancer.  It  is also  a  risk  factor associated  with  other cancers such  as  colorectal, oesophageal,  pancreatic and  kidney cancers.  It  has been  estimated that  smoking  is responsible  for nearly  a  fifth  of  all  new cancer cases .
+
+Diet: 
+It is estimated  that  little percentage of new  cancers are  linked  to  diet  especially not taking the recommended  intake  levels of  fruit  and  vegetables,  red  and  processed  meat, fibre  and  salt.
+
+Alcohol:
+Alcohol consumption  is  a  risk  factor associated  with  oral, oesophageal, colorectal, liver and breast  cancers though the hazardous/harmful  drinking  has been reduced  in  recent  years.
+
+Obesity:
+Obesity  is a  risk  factor  for a  number  of  types  of  cancers including  breast,  uterine, oesophageal  adenocarcinoma  and  kidney  cancers.
+
+
+```{r}
+### Cancer Incidence by Site based on Gender:
+# p <- cancer_incidence_summary_borders %>% 
+#   filter (cancer_site != "All cancer types",
+#           sex != "All") %>% 
+#   select (cancer_site, incidences_all_ages, sex) %>% 
+#   distinct() %>% 
+#   arrange(desc(incidences_all_ages)) %>% 
+#   slice_max(incidences_all_ages,n = 20) %>% 
+#   ggplot()+
+#   aes(x= reorder(cancer_site,incidences_all_ages), y = incidences_all_ages) +
+#   geom_col(position = "dodge") +
+#   facet_wrap(~sex, scales = "free" )+
+#   color_theme() +
+#   labs(y = "\n Number of incidences\n",
+#        x = "\n\n\n\n\n\n Cancer Site",
+#       ) +
+#   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) 
+# 
+# ggplotly(p)
+```
+
+
+
+```{r}
+p <- cancer_incidence_summary_borders %>% 
+  filter(sex != "All",
+         cancer_site == "All cancer types") %>% 
+  select(age_category,num_of_incidences,sex) %>% 
+  ggplot()+
+  aes(x = age_category, y = num_of_incidences)+
+  geom_col(aes(fill = sex), position = "dodge")+
+  color_theme()+
+  labs(x = "Age Group ",
+       y = "Number of Registrations",
+      ) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) +
+  scale_fill_manual(values = c("#1f78b4", "#b2df8a"))
+
+ggplotly(p)  
+```
